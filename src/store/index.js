@@ -1,32 +1,36 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    reqUrl: 'http://127.0.0.1:666/api/',
-    userInfo: ''
+    reqUrl: "http://127.0.0.1:666/api/",
+    userInfo: ""
   },
   mutations: {
     setUserInfo(state, param) {
-      state.userInfo = JSON.stringify(param)
-      window.localStorage.setItem('satania.admin', state.userInfo)
+      state.userInfo = JSON.stringify(param);
+      window.localStorage.setItem("satania.admin", state.userInfo);
     },
     delUserInfo(state) {
-      state.userInfo = ''
-      window.localStorage.removeItem('satania.admin')
+      state.userInfo = "";
+      window.localStorage.removeItem("satania.admin");
     }
   },
   getters: {
     getReqUrl: state => () => {
-      return state.reqUrl
+      return state.reqUrl;
     },
-    getUserInfo:state => () => {
-        return state.userInfo
+    getUserInfo: state => () => {
+      if (Object.is(state.userInfo, "")) {
+        return window.localStorage.getItem("satania.admin");
+      } else {
+        return state.userInfo;
+      }
     }
   },
   actions: {}
-})
+});
 
-export default store
+export default store;

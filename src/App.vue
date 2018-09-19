@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <mu-appbar style="width=100%" color="primary">
-      <mu-menu slot="right">
-        <mu-button flat>{{userinfo.NickName}}</mu-button>
+    <div class="appbar">
+ <mu-appbar style="width=100%" color="primary">
+   Satania
+      <mu-menu slot="right" v-if="userinfo.nickName != ''">
+        <mu-button flat>{{userinfo.nickName}}</mu-button>
         <mu-list slot="content">
           <mu-list-item button>
             <mu-list-item-content>
@@ -17,51 +19,55 @@
         </mu-list>
       </mu-menu>
     </mu-appbar>
+    </div>
+   
     <router-view/>
   </div>
 </template>
 
 <script>
-import Axios from 'axios'
+import Axios from "axios";
 export default {
-  name: 'App',
-  data(){
-    return{
-      userinfo:{},
-      reqUrl:this.$store.getters.getReqUrl()
+  name: "App",
+  data() {
+    return {
+      reqUrl: this.$store.getters.getReqUrl()
+    };
+  },
+  computed: {
+    userinfo() {
+      const objStr = this.$store.getters.getUserInfo();
+      if (objStr == "" || objStr == null || objStr == undefined) {
+        this.$router.replace("/Login.html");
+        return { nickName: "" };
+      } else if (objStr == null || Object.keys(objStr).length <= 0) {
+        this.$router.replace("/Login.html");
+        return { nickName: "" };
+      } else {
+        const usr = JSON.parse(objStr);
+        return usr;
+      }
     }
   },
-  mounted(){
-    this.init()
-  },
-  methods:{
-    init:function(){
-      const objStr = this.$store.getters.getUserInfo()
-      if(objStr == '' || objStr == null || objStr == undefined){
-        this.$router.replace('/Login.html')
-      }
-      const usr = JSON.parse(objStr)
-      this.userinfo = usr
-      if(this.userinfo == null || Object.keys(this.userinfo).length <= 0){
-        this.$router.replace('/Login.html')
-      }
-    },
-    SingOut:function(){
-      const apiUrl = this.reqUrl + 'Ajax'
-      Axios.get(apiUrl).then(response=>{
-        if(response.status == 200){
-          this.$store.commit('delUserInfo')
-          this.$router.replace('/Login.html')
-        }else{
-          this.$alert('退出报错了')
-        }
-      }).catch(err=>{
-        this.$alert('退出存在异常')
-        console.error(err)
-      })
+  methods: {
+    SingOut: function() {
+      const apiUrl = this.reqUrl + "Ajax";
+      Axios.get(apiUrl)
+        .then(response => {
+          if (response.status == 200) {
+            this.$store.commit("delUserInfo");
+            this.$router.replace("/Login.html");
+          } else {
+            this.$alert("退出报错了");
+          }
+        })
+        .catch(err => {
+          this.$alert("退出存在异常");
+          console.error(err);
+        });
     }
   }
-}
+};
 </script>
 
 <style>
@@ -70,5 +76,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
+}
+</style>
+<style scoped>
+.appbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+.mu-button {
+  text-transform: none;
 }
 </style>
