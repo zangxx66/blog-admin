@@ -49,7 +49,9 @@ export default {
             this.$alert(response.data);
             return false;
           } else {
-            this.$store.commit("setUserInfo", response.data);
+            const callback = response.data
+            this.$store.commit("setUserInfo", callback);
+            // this.$store.commit('setSession',callback.sessionid)
             this.$router.replace("/");
           }
         })

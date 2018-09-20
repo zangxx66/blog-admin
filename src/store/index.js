@@ -1,36 +1,105 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    reqUrl: "http://127.0.0.1:666/api/",
-    userInfo: ""
+    // reqUrl: "http://127.0.0.1:666/api/",
+    reqUrl: 'http://localhost:5000/api/',
+    userInfo: '',
+    session:''
   },
   mutations: {
     setUserInfo(state, param) {
-      state.userInfo = JSON.stringify(param);
-      window.localStorage.setItem("satania.admin", state.userInfo);
+      state.userInfo = JSON.stringify(param)
+      var minutes = 60
+      var exp = new Date()
+      exp.setTime(exp.getTime() + minutes * 60 * 1000)
+      document.cookie =
+        'satania.admin' +
+        '=' +
+        escape(state.userInfo) +
+        ';expires=' +
+        exp.toGMTString() +
+        ';path=/'
     },
     delUserInfo(state) {
-      state.userInfo = "";
-      window.localStorage.removeItem("satania.admin");
+      var exp = new Date()
+      exp.setTime(exp.getTime() - 1)
+      var reg = new RegExp('(^| )' + 'satania.admin' + '=([^;]*)(;|$)')
+      var arr = null
+      if ((arr = document.cookie.match(reg))) {
+        document.cookie =
+          'satania.admin' +
+          '=' +
+          state.userInfo +
+          ';expires=' +
+          exp.toGMTString()
+      }
+      state.userInfo = ''
+    },
+    setSession(state,param){
+      state.session = param
+      var minutes = 60
+      var exp = new Date()
+      exp.setTime(exp.getTime() + minutes * 60 * 1000)
+      document.cookie =
+        'satania.session' +
+        '=' +
+        escape(state.session) +
+        ';expires=' +
+        exp.toGMTString() +
+        ';path=/'
+    },
+    delSession(state){
+      var exp = new Date()
+      exp.setTime(exp.getTime() - 1)
+      var reg = new RegExp('(^| )' + 'satania.session' + '=([^;]*)(;|$)')
+      var arr = null
+      if ((arr = document.cookie.match(reg))) {
+        document.cookie =
+          'satania.session' +
+          '=' +
+          state.userInfo +
+          ';expires=' +
+          exp.toGMTString()
+      }
+      state.session = ''
     }
   },
   getters: {
     getReqUrl: state => () => {
-      return state.reqUrl;
+      return state.reqUrl
     },
     getUserInfo: state => () => {
-      if (Object.is(state.userInfo, "")) {
-        return window.localStorage.getItem("satania.admin");
+      if (Object.is(state.userInfo, '')) {
+        var arr,
+          reg = new RegExp('(^| )' + 'satania.admin' + '=([^;]*)(;|$)')
+        if ((arr = document.cookie.match(reg))) {
+          return unescape(arr[2])
+        } else {
+          return null
+        }
       } else {
-        return state.userInfo;
+        return state.userInfo
+      }
+    },
+    getSession:state => () => {
+      if (Object.is(state.session, '')) {
+        var arr,
+          reg = new RegExp('(^| )' + 'satania.session' + '=([^;]*)(;|$)')
+        if ((arr = document.cookie.match(reg))) {
+          return unescape(arr[2])
+        } else {
+          return null
+        }
+      } else {
+        return state.session
       }
     }
   },
   actions: {}
-});
+})
 
-export default store;
+export default store

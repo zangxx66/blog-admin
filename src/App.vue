@@ -56,6 +56,7 @@ export default {
         .then(response => {
           if (response.status == 200) {
             this.$store.commit("delUserInfo");
+            this.$store.commit('delSession');
             this.$router.replace("/Login.html");
           } else {
             this.$alert("退出报错了");

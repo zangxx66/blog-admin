@@ -24,6 +24,7 @@
                 bar:[
                     {
                         text:'主页',
+                        path:'/',
                         disabled:true
                     }
                 ],
@@ -38,7 +39,7 @@
         },
         methods:{
             init:function(page){
-                const apiUrl = this.reqUrl + 'Article'
+                const apiUrl = this.reqUrl + 'Article/Get'
                 Axios.get(apiUrl,{Page:page}).then(response=>{
                     if(response.status == 200){
                         const callback = response.data
