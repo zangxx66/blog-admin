@@ -8,7 +8,7 @@
                 </mu-button>
             </div>
         </div>
-        <Table :list="articleItems"></Table>
+        <Table ref="table"></Table>
         <Pagination :total="total" :current="current" v-on:changePage="init"></Pagination>
     </mu-container>
 </template>
@@ -46,6 +46,7 @@
                         this.total = callback.total
                         this.current = callback.current
                         this.articleItems = callback.data
+                        this.$refs.table.init(this.articleItems)
                     }else{
                         this.$alert('获取列表失败')
                     }

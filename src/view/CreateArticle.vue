@@ -5,6 +5,8 @@
       <mu-text-field v-model="title" placeholder="标题..."></mu-text-field>
       <br>
       <mu-text-field v-model="category" placeholder="标签..."></mu-text-field>
+      <br>
+      <mu-text-field v-model="summary" placeholder="描述..."></mu-text-field>
     </div>
     <div class="quill-editor-example">
       <!-- quill-editor -->
@@ -33,6 +35,7 @@ export default {
       title: '',
       content: '',
       category: '',
+      summary:'',
       reqUrl: this.$store.getters.getReqUrl(),
       editorOption: {
         toolbar: [
@@ -74,16 +77,23 @@ export default {
       const apiUrl = this.reqUrl + 'Article/post'
       const args = JSON.stringify({
         Id:'ab0f9474-b3de-4066-a01e-5d42d4fe6d7f',
-        Summary:'666',
+        Summary:this.summary,
         Title: this.title,
         Category: this.category,
         Context: this.content
       })
+      const userInfo = this.$store.getters.getUserInfo()
+      let id = ''
+      if(userInfo != null || Object.keys(userInfo).length > 0){
+        id = JSON.parse(userInfo).id
+      }else{
+        this.$router.replace('/Login.html')
+      }
 
       Axios.defaults.headers.post['Content-Type'] =
         'application/x-www-form-urlencoded;charset=UTF-8'
       
-      Axios.post(apiUrl, Qs.stringify({jsonStr:args}))
+      Axios.post(apiUrl, Qs.stringify({jsonStr:args,id:id}))
         .then(response => {
           if (response.status == 404) {
             this.$alert('登录超时')
