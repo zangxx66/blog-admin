@@ -16,60 +16,59 @@
     </div>
 </template>
 <script>
-import Axios from 'axios'
-import Qs from 'qs'
+import Axios from "axios";
+import Qs from "qs";
 
 export default {
   // props:['list'],
   data() {
     return {
       columns: [
-        { title: '标题', width: 200, name: 'title' },
-        { title: '操作', wiidth: 200, name: 'option', align: 'center' }
+        { title: "标题", width: 200, name: "title" },
+        { title: "操作", wiidth: 200, name: "option", align: "center" }
       ],
       reqUrl: this.$store.getters.getReqUrl(),
       list: []
-    }
+    };
   },
   methods: {
     init: function(param) {
-      this.list = param
+      this.list = param;
     },
     openDetail: function(param) {
-      console.log(param)
+      console.log(param);
     },
     confirmDel: function(param) {
-      this.$confirm('是否删除？', '提示', {
-        type: 'warning'
+      this.$confirm("是否删除？", "提示", {
+        type: "warning"
       }).then(({ result }) => {
         if (result) {
-          this.del(param)
+          this.del(param);
         }
-      })
+      });
     },
     del: function(param) {
-      const id = param
-      const apiUrl = this.reqUrl + 'Article/Delete'
-      const args = Qs.stringify({ param: id })
+      const apiUrl = this.reqUrl + "Article/" + param;
 
-      Axios.delete(apiUrl, { data: args })
+      Axios.delete(apiUrl)
         .then(response => {
           if (response.status == 404) {
-            this.$alert('文章不存在')
-            return false
+            this.$alert("文章不存在");
+            return false;
           } else if (response.status == 204) {
-            this.$alert('删除成功')
+            this.$alert("删除成功");
+            this.list.filter(obj => obj.id == param);
           } else {
-            this.$alert('删除失败', response.status)
+            this.$alert("删除失败", response.status);
           }
         })
         .catch(err => {
-          this.$alert('请求错误')
-          console.error(err)
-        })
+          this.$alert("请求错误");
+          console.error(err);
+        });
     }
   }
-}
+};
 </script>
 <style scoped>
 .tab-box {
