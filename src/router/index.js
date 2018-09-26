@@ -1,13 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 const Home = () => import('../view/Home')
 const Login = () => import('../view/Login')
 const CreateArticle = () => import('../view/CreateArticle.vue')
+const EditArticle = () => import('../view/EditArticle.vue')
 
 Vue.use(Router)
 
 export default new Router({
-  mode:'history',
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -15,19 +16,25 @@ export default new Router({
       component: Home
     },
     {
-      path:'/Login.html',
-      name:'Login',
-      component:Login
+      path: '/Login.html',
+      name: 'Login',
+      component: Login
     },
     {
-      path:'/CreateArticle.html',
-      name:'CreateArticle',
-      component:CreateArticle
+      path: '/CreateArticle.html',
+      name: 'CreateArticle',
+      component: CreateArticle
     },
     {
-      path:'*',
-      name:'404',
-      redirect:{name:'Home'}
+      path: '/EditArticle.html',
+      name: 'EditArticle',
+      props: { id: { type: String } },
+      component: EditArticle
+    },
+    {
+      path: '*',
+      name: '404',
+      redirect: { name: 'Home' }
     }
   ]
 })
