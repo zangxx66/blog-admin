@@ -107,7 +107,7 @@ export default {
         Summary: this.summary,
         Title: this.title,
         Category: this.category,
-        Context: this.content
+        Context: encodeURIComponent(this.content)
       })
 
       Axios.defaults.headers.post['Content-Type'] =

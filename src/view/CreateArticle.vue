@@ -80,7 +80,7 @@ export default {
         Summary:this.summary,
         Title: this.title,
         Category: this.category,
-        Context: this.content
+        Context: encodeURIComponent(this.content)
       })
       const userInfo = this.$store.getters.getUserInfo()
       let id = ''
