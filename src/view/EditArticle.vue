@@ -87,7 +87,7 @@ export default {
           } else if (response.status == 200) {
             const callback = response.data
             this.title = callback.title
-            this.content = callback.context
+            this.content = decodeURIComponent(callback.context)
             this.summary = callback.summary
             this.category = callback.category
             this.id = callback.id
