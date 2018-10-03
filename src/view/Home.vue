@@ -13,58 +13,65 @@
     </mu-container>
 </template>
 <script>
-    import Breadcrumb from '../components/Home/Breadcrumb.vue'
-    import Pagination from '../components/Home/Pagination.vue'
-    import Table from '../components/Home/Table.vue'
-    import Axios from 'axios'
+import Breadcrumb from "../components/Home/Breadcrumb.vue";
+import Pagination from "../components/Home/Pagination.vue";
+import Table from "../components/Home/Table.vue";
+import Axios from "axios";
+import Qs from "qs";
 
-    export default {
-        data(){
-            return{
-                bar:[
-                    {
-                        text:'主页',
-                        path:'/',
-                        disabled:true
-                    }
-                ],
-                articleItems:[],
-                total:0,
-                current:1,
-                reqUrl:this.$store.getters.getReqUrl()
-            }
-        },
-        mounted(){
-            this.init(1)
-        },
-        methods:{
-            init:function(page){
-                const apiUrl = this.reqUrl + 'Article/Get'
-                Axios.get(apiUrl,{Page:page}).then(response=>{
-                    if(response.status == 200){
-                        const callback = response.data
-                        this.total = callback.total
-                        this.current = callback.current
-                        this.articleItems = callback.data
-                        this.$refs.table.init(this.articleItems)
-                    }else{
-                        this.$alert('获取列表失败')
-                    }
-                }).catch(err=>{
-                    this.$alert('获取列表异常')
-                    console.error(err)
-                })
-            }
-        },
-        components:{
-            Breadcrumb,
-            Pagination,
-            Table
+export default {
+  data() {
+    return {
+      bar: [
+        {
+          text: "主页",
+          path: "/",
+          disabled: true
         }
+      ],
+      articleItems: [],
+      total: 0,
+      current: 1,
+      reqUrl: this.$store.getters.getReqUrl()
+    };
+  },
+  mounted() {
+    this.init(1);
+  },
+  methods: {
+    init: function(page) {
+      const apiUrl = this.reqUrl + "Article/Get";
+
+      Axios.defaults.headers.post["Content-Type"] =
+        "application/x-www-form-urlencoded;charset=UTF-8";
+
+      Axios.get(apiUrl,{params:{ Page: page, Token: 2550505 }})
+        .then(response => {
+          if (response.status == 200) {
+            const callback = response.data;
+            this.total = callback.total;
+            this.current = callback.current;
+            this.articleItems = callback.data;
+            this.$refs.table.init(this.articleItems);
+          } else {
+            this.$alert("获取列表失败");
+          }
+        })
+        .catch(err => {
+          this.$alert("获取列表异常");
+          console.error(err);
+        });
     }
+  },
+  components: {
+    Breadcrumb,
+    Pagination,
+    Table
+  }
+};
 </script>
 <style scoped>
-.addBtn{
-    margin-top: 10px;
+.addBtn {
+  margin-top: 10px;
 }
 </style>

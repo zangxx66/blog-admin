@@ -8,6 +8,7 @@ if (Object.is(process.env.NODE_ENV, 'production')) {
   httpUrl = 'https://api.satania.app/api/'
 } else {
   httpUrl = 'http://127.0.0.1:666/api/'
+  // httpUrl = 'http://localhost:5000/api/'
 }
 
 console.log(process.env.NODE_ENV)

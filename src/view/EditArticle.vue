@@ -7,7 +7,11 @@
             <mu-text-field v-model="category" placeholder="标签..."></mu-text-field>
             <br>
             <mu-text-field v-model="summary" placeholder="描述..."></mu-text-field>
+            <br>
+            <span>是否公开</span>
+            <mu-switch v-model="enable"></mu-switch>
         </div>
+        <br>
         <div class="quill-editor-example">
             <!-- quill-editor -->
             <quill-editor ref="myTextEditor" v-model="content" :options="editorOption">
@@ -37,6 +41,7 @@ export default {
       content: '',
       category: '',
       summary: '',
+      enable:true,
       id: '',
       reqUrl: this.$store.getters.getReqUrl(),
       editorOption: {
@@ -90,6 +95,7 @@ export default {
             this.content = decodeURIComponent(callback.context)
             this.summary = callback.summary
             this.category = callback.category
+            this.enable = callback.enable
             this.id = callback.id
           } else {
             this.$alert('获取实体报错,' + response.status)
@@ -107,6 +113,7 @@ export default {
         Summary: this.summary,
         Title: this.title,
         Category: this.category,
+        Enable:this.enable,
         Context: encodeURIComponent(this.content)
       })
 
@@ -118,8 +125,7 @@ export default {
           if (response.status == 204) {
             this.$alert('更新成功')
             this.$router.replace({
-              name: 'EditArticle',
-              params: { id: this.id }
+              name: 'Home'
             })
           } else {
             this.$alert('提交失败,' + response.status)

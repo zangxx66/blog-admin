@@ -2,7 +2,14 @@
   <div id="app">
     <div class="appbar">
  <mu-appbar style="width=100%" color="primary">
-   Satania
+   <div class="appbar-menu" v-if="userinfo.nickName != ''">
+     <mu-button flat to="/">文章区</mu-button>
+   <mu-button flat to="/Timeline.html">更新记录</mu-button>
+   <mu-button flat to="#">留言板</mu-button>
+   <mu-button flat to="#">友链</mu-button>
+   </div>
+   
+   
       <mu-menu slot="right" v-if="userinfo.nickName != ''">
         <mu-button flat>{{userinfo.nickName}}</mu-button>
         <mu-list slot="content">
@@ -56,7 +63,7 @@ export default {
         .then(response => {
           if (response.status == 200) {
             this.$store.commit("delUserInfo");
-            this.$store.commit('delSession');
+            this.$store.commit("delSession");
             this.$router.replace("/Login.html");
           } else {
             this.$alert("退出报错了");

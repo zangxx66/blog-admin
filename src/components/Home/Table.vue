@@ -3,11 +3,14 @@
         <mu-paper :z-depth="1">
             <mu-data-table border :columns="columns" :data="list">
                 <template slot-scope="scope">
-                    <td @click="openDetail(scope.row.id)" style="cursor: pointer;">{{scope.row.title}}</td>
+                    <td style="text-overflow: ellipsis;white-space: nowrap;">{{scope.row.title}}</td>
+                    <td>{{scope.row.enable}}</td>
                     <td>
                         <mu-flex justify-content="center" align-items="center" class="options-box">
-                            <mu-button @click="confirmDel(scope.row.id)">
-                                delete
+                          <mu-button icon @click="openDetail(scope.row.id)">
+                            <mu-icon right value="edit"></mu-icon>
+                          </mu-button>
+                            <mu-button icon @click="confirmDel(scope.row.id)">
                                 <mu-icon right value="delete"></mu-icon>
                             </mu-button>
                         </mu-flex>
@@ -27,6 +30,7 @@ export default {
     return {
       columns: [
         { title: '标题', width: 200, name: 'title' },
+        {title:'是否公开',width:200,name:'enable'},
         { title: '操作', wiidth: 200, name: 'option', align: 'center' }
       ],
       reqUrl: this.$store.getters.getReqUrl(),
