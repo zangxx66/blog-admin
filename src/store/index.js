@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 let httpUrl = 'https://api.satania.app/api/'
 if (Object.is(process.env.NODE_ENV, 'production')) {
-  httpUrl = 'https://api.satania.app/api/'
+  httpUrl = 'https://api.satania.app:8996/api/'
 } else {
   httpUrl = 'http://127.0.0.1:666/api/'
   // httpUrl = 'http://localhost:5000/api/'
